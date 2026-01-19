@@ -30,10 +30,13 @@ export default function RegisterPage() {
     setError(null)
     setLoading(true)
 
-    // 1️⃣ Sign up
+    // 1️⃣ Sign up (email confirmation redirect for Vercel)
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: "https://cads-feedback-system.vercel.app",
+      },
     })
 
     if (signUpError) {
