@@ -1,30 +1,42 @@
 "use client"
 
-import { useState } from "react"
-import { supabase } from "@/lib/supabase"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
-export default function Home() {
-  const [subject, setSubject] = useState("")
-  const [teacher, setTeacher] = useState("")
-  const [rating, setRating] = useState(5)
-  const [comment, setComment] = useState("")
-  const [done, setDone] = useState(false)
-
-  const submit = async () => {
-    await supabase.from("feedback").insert({
-      subject, teacher, rating, comment
-    })
-    setDone(true)
-  }
-
-  if (done) return <h2>Thanks for your feedback 🎉</h2>
-
+export default function WelcomePage() {
   return (
-    <div>
-      <h1>Student Feedback</h1>
-      <input placeholder="Subject" onChange={e=>setSubject(e.target.value)} />
-      <input placeholder="Teacher" onChange={e=>setTeacher(e.target.value)} />
-      <button onClick={submit}>Submit</button>
-    </div>
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-secondary to-white px-6 py-12">
+      <div className="max-w-xl rounded-2xl border bg-card p-10 shadow-xl">
+        <div className="space-y-4 text-center">
+          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
+            Student Feedback System
+          </p>
+          <h1 className="text-3xl font-semibold sm:text-4xl">
+            Welcome! Choose how you want to get started.
+          </h1>
+          <p className="text-muted-foreground">
+            Log in if you already have an account or create one to begin sharing
+            feedback.
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+          <Button asChild className="w-full">
+            <Link href="/login">Log in</Link>
+          </Button>
+          <Button asChild variant="outline" className="w-full">
+            <Link href="/register">Register</Link>
+          </Button>
+        </div>
+
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          Or continue to the{" "}
+          <Link href="/home" className="font-medium text-primary underline">
+            homepage
+          </Link>
+          .
+        </p>
+      </div>
+    </main>
   )
 }
