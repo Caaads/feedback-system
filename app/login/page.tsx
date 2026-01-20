@@ -26,10 +26,26 @@ export default function LoginPage() {
     setError(null)
     setLoading(true)
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
+
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/6ac0bd10-a869-466e-a257-d935ecae3c38',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        sessionId:'debug-session',
+        runId:'initial',
+        hypothesisId:'H5',
+        location:'app/login/page.tsx:handleLogin',
+        message:'Result of signInWithPassword',
+        data:{ hasSession: !!data?.session, hasError: !!error },
+        timestamp:Date.now()
+      })
+    }).catch(()=>{});
+    // #endregion
 
     if (error) {
       setError(error.message)
